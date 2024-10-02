@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 const bcrypt = require('bcryptjs');
 const User = require("./../Models/UserModel");
 const jwt = require('jsonwebtoken');
-const Transporter = require('./../config');
+const Transporter = require('./../Config');
 
 // Generate OTP
 const generateOTP = () => {
