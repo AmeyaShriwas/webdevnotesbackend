@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const User = require("./../Models/UserModel");
 const jwt = require('jsonwebtoken');
 const Transporter = require('./../Config');
+const crypto = require('crypto')
 
 // Generate OTP
 const generateOTP = () => {
@@ -11,12 +12,31 @@ const generateOTP = () => {
 
 // Send OTP Email
 const sendOtpEmail = async(email, otp) => {
+
+  const resetToken = crypto.randomBytes(32).toString('hex')
+  const resetTokenExpires = Date.now() + 5 * 60 * 1000
     
+
+  // Save the token and expiration time in the user's record
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  user.resetPasswordToken = resetToken;
+  user.resetPasswordExpires = resetTokenExpires;
+  await user.save()
+
+  const resetLink = `http://localhost:3000/resetPassword?token=${resetToken}`; // Adjust port as necessary
+
+
   const mailOption = {
     from: process.env.EMAIL_USER,
     to: email,
     subject: 'Your One Time Password (OTP) Code',
-    text: `Dear User, Your One-Time-Password (OTP) code for account verification is: ${otp}\n\nThis OTP is valid for the next 5 minutes. Please use it to complete the verification process.\n\nIf you didn't request this OTP, please ignore this email.\n\nBest regards,\nAmeya Shriwas`
+    text: `Dear User, Your One-Time-Password (OTP) code for account verification is: ${otp}\n\nThis OTP is valid for the next 5 minutes. Please use it to complete the verification process.\n\nIf you didn't request this OTP, please ignore this email.\n\nBest regards,\nAmeya Shriwas`,
+    Link: `You requested a password reset. Please click the link below to reset your password:\n\n${resetLink}\n\nThis link will expire in 5 minutes.`,
+
   };
   await Transporter.sendMail(mailOption);
 };
