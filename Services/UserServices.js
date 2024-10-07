@@ -33,11 +33,28 @@ const sendOtpEmail = async(email, otp) => {
   const mailOption = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: 'Your One Time Password (OTP) Code',
-    text: `Dear User, Your One-Time-Password (OTP) code for account verification is: ${otp}\n\nThis OTP is valid for the next 5 minutes. Please use it to complete the verification process.\n\nIf you didn't request this OTP, please ignore this email.\n\nBest regards,\nAmeya Shriwas`,
-    Link: `You requested a password reset. Please click the link below to reset your password:\n\n${resetLink}\n\nThis link will expire in 5 minutes.`,
-
+    subject: 'Password Reset Request - Your OTP Code',
+    text: `
+  Dear ${username || 'User'},
+  
+  You have requested to reset your password. To complete the process, please use the following One-Time Password (OTP):
+  
+  OTP Code: ${otp}
+  
+  Alternatively, you can reset your password by clicking the link below:
+  
+  Reset Link: ${resetLink}
+  
+  **Note**: This OTP and link are valid for the next 5 minutes. If you did not request a password reset, please ignore this email.
+  
+  If you need further assistance, feel free to reach out to our support team.
+  
+  Best regards,  
+  The [Your Company] Team
+    `,
   };
+  
+  console.log('mail', mailOption)
   await Transporter.sendMail(mailOption);
 };
 
