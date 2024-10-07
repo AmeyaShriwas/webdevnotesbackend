@@ -54,7 +54,6 @@ const sendOtpEmail = async(email, otp) => {
     `,
   };
   
-  console.log('mail', mailOption)
   await Transporter.sendMail(mailOption);
 };
 
