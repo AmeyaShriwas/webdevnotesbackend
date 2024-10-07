@@ -27,7 +27,7 @@ const sendOtpEmail = async(email, otp) => {
   user.resetPasswordExpires = resetTokenExpires;
   await user.save()
 
-  const resetLink = `http://localhost:3000/resetPassword?token=${resetToken}`; // Adjust port as necessary
+  const resetLink = `https://ameyashriwas.in/resetPassword?token=${resetToken}`; // Adjust port as necessary
 
 
   const mailOption = {
