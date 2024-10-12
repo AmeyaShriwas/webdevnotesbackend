@@ -73,9 +73,6 @@ const forgotPassword = async (req, res) => {
 const resetPassword = async (req, res) => {
   const { email, otp, newPassword } = req.body;
 
- 
-
-
 
   try {
     const user = await authService.findUserByEmail(email);
@@ -134,4 +131,19 @@ const verifyToken = async(req, res)=> {
       }
 }
 
-module.exports = { signUpUser, verifyOtp, loginUser, forgotPassword, resetPassword, verifyToken };
+const contactUs = async(req, resp)=> {
+  const { name, email, message } = req.body;
+
+  try {
+    const result = await authService.ContactUsServices(name, email, message);
+    if (!result.status) {
+      return resp.status(400).json({ message: "error in submitting contact us" });
+    } else {
+      resp.status(200).json({ message: "Message successfully sended" });
+    }
+  } catch (error) {
+    resp.status(500).json({ message: error.message });
+  }
+
+}
+module.exports = { signUpUser, verifyOtp, loginUser, forgotPassword, resetPassword, verifyToken, contactUs };

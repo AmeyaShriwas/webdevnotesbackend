@@ -4,6 +4,7 @@ const User = require("./../Models/UserModel");
 const jwt = require('jsonwebtoken');
 const Transporter = require('./../Config');
 const crypto = require('crypto')
+const ContactUs  = require('./../Models/ContactUs')
 
 // Generate OTP
 const generateOTP = () => {
@@ -146,6 +147,31 @@ const updateUserPassword = async (user, newPassword) => {
   await user.save();
 };
 
+const ContactUsServices = async(data)=> {
+     const {name, email, message} = data
+     try{
+      if(name.length !==0 && email.length !==0 && message.length !==0){
+        const newMessage = new ContactUs({
+            name: name,
+            email: email,
+            message: message
+        })
+
+        await newMessage.save()
+        return {status: true, message:'Message successfully sent'}
+      }else{
+        return {status: false, message:'please fill the all required fields'}
+      }
+
+
+
+     }
+     catch(error){
+      console.log('error', error)
+      return {status: false, message:'internal server error'}
+     }
+}
+
 module.exports = {
   generateOTP,
   sendOtpEmail,
@@ -155,4 +181,5 @@ module.exports = {
   loginUser,
   updateOtpForUser,
   updateUserPassword,
+  ContactUsServices
 };
