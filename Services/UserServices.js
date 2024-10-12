@@ -165,7 +165,7 @@ const ContactUsServices = async (data) => {
     }
   } catch (error) {
     console.log('Error:', error);
-    return { status: false, message: 'Internal server error' };
+    return { status: false, message: error };
   }
 };
 
