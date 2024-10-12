@@ -1,6 +1,7 @@
 const authService = require("./../Services/UserServices");
 const jwt = require('jsonwebtoken')
-const User = require('./../Models/UserModel')
+const User = require('./../Models/UserModel');
+const ContactUs = require("../Models/ContactUs");
 
 const signUpUser = async (req, res) => {
   const { name,email,number, password } = req.body;
@@ -145,7 +146,17 @@ const contactUs = async (req, resp) => {
     }
   } catch (error) {
     console.error('Error in contactUs:', error); // More descriptive error logging
-    resp.status(500).json({ message: error }); // Generic error message to the user
+    resp.status(500).json({ message: 'internal server error' }); // Generic error message to the user
   }
 };
-module.exports = { signUpUser, verifyOtp, loginUser, forgotPassword, resetPassword, verifyToken, contactUs };
+
+const getContactUsMessage = async(req, resp)=> {
+    try{
+      const findMessage = await ContactUs.find();
+      resp.json({status: true, data: findMessage})
+    }
+    catch(error){
+      resp.json({status: false})
+    }
+}
+module.exports = { signUpUser, verifyOtp, loginUser, forgotPassword, resetPassword, verifyToken, contactUs, getContactUsMessage };
