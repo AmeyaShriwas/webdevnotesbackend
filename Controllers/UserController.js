@@ -136,18 +136,17 @@ const contactUs = async (req, resp) => {
   const { name, email, message } = req.body;
 
   try {
-    // Ensure you're passing the data as an object
-    const result = await ContactUsServices(name, email, message);
-    return resp.json({ message: result });
+    // Pass data as an object
+    const result = await ContactUsServices({ name, email, message });
 
     if (!result.status) {
-      return resp.status(400).json({ message: result.message }); // Return the actual error message from the service
+      return resp.status(400).json({ message: result.message });
     } else {
-      return resp.status(200).json({ message: "Message successfully sent" }); // Corrected 'sended' to 'sent'
+      return resp.status(200).json({ message: "Message successfully sent" });
     }
   } catch (error) {
-    console.error('Error in contactUs:', error); // More descriptive error logging
-    resp.status(500).json({ message: 'internal server error' }); // Generic error message to the user
+    console.error('Error in contactUs:', error);
+    resp.status(500).json({ message: 'Internal server error' });
   }
 };
 

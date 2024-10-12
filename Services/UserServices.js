@@ -164,8 +164,8 @@ const ContactUsServices = async (data) => {
       return { status: false, message: 'Please fill in all required fields' };
     }
   } catch (error) {
-    console.log('Error:', error);
-    return { status: false, message: error };
+    console.error('Error in ContactUsServices:', error);
+    return { status: false, message: 'Internal server error' };
   }
 };
 
