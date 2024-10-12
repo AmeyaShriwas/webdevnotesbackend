@@ -131,19 +131,21 @@ const verifyToken = async(req, res)=> {
       }
 }
 
-const contactUs = async(req, resp)=> {
+const contactUs = async (req, resp) => {
   const { name, email, message } = req.body;
 
   try {
-    const result = await authService.ContactUsServices(name, email, message);
+    // Ensure you're passing the data as an object
+    const result = await ContactUsServices({ name, email, message });
+
     if (!result.status) {
-      return resp.status(400).json({ message: "error in submitting contact us" });
+      return resp.status(400).json({ message: result.message }); // Return the actual error message from the service
     } else {
-      resp.status(200).json({ message: "Message successfully sended" });
+      return resp.status(200).json({ message: "Message successfully sent" }); // Corrected 'sended' to 'sent'
     }
   } catch (error) {
-    resp.status(500).json({ message: error.message });
+    console.error('Error in contactUs:', error); // More descriptive error logging
+    resp.status(500).json({ message: 'Internal server error' }); // Generic error message to the user
   }
-
-}
+};
 module.exports = { signUpUser, verifyOtp, loginUser, forgotPassword, resetPassword, verifyToken, contactUs };

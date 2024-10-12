@@ -147,30 +147,27 @@ const updateUserPassword = async (user, newPassword) => {
   await user.save();
 };
 
-const ContactUsServices = async(data)=> {
-     const {name, email, message} = data
-     try{
-      if(name.length !==0 && email.length !==0 && message.length !==0){
-        const newMessage = new ContactUs({
-            name: name,
-            email: email,
-            message: message
-        })
+const ContactUsServices = async (data) => {
+  const { name, email, message } = data;
 
-        await newMessage.save()
-        return {status: true, message:'Message successfully sent'}
-      }else{
-        return {status: false, message:'please fill the all required fields'}
-      }
+  try {
+    if (name.length !== 0 && email.length !== 0 && message.length !== 0) {
+      const newMessage = new ContactUs({
+        name: name,
+        email: email,
+        message: message,
+      });
 
-
-
-     }
-     catch(error){
-      console.log('error', error)
-      return {status: false, message:'internal server error'}
-     }
-}
+      await newMessage.save();
+      return { status: true, message: 'Message successfully sent' };
+    } else {
+      return { status: false, message: 'Please fill in all required fields' };
+    }
+  } catch (error) {
+    console.log('Error:', error);
+    return { status: false, message: 'Internal server error' };
+  }
+};
 
 module.exports = {
   generateOTP,
