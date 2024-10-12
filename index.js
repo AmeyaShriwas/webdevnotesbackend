@@ -4,6 +4,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const authRoutes = require('./Routes/Users')
+const adminRoutes = require('./Routes/Admin')
 
 dotenv.config()
 
