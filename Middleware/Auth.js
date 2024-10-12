@@ -9,10 +9,10 @@ const Auth = async (req, resp, next) => {
             return resp.status(401).json({ status: false, message: 'Token missing in headers' });
         }
 
-        const token = authHeader.replace("Bearer ", "").trim(); // Extract token from 'Bearer '
+        // const token = authHeader.replace("Bearer ", "").trim(); // Extract token from 'Bearer '
 
         // Verify and decode token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Ensure you have a secret key set in environment variables
+        const decoded = jwt.verify(authHeader, process.env.JWT_SECRET); // Ensure you have a secret key set in environment variables
 
         // Find user by _id from the token
         const user = await User.findById(decoded._id);
