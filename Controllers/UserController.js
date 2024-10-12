@@ -145,7 +145,7 @@ const contactUs = async (req, resp) => {
     }
   } catch (error) {
     console.error('Error in contactUs:', error); // More descriptive error logging
-    resp.status(500).json({ message: 'Internal server error' }); // Generic error message to the user
+    resp.status(500).json({ message: error }); // Generic error message to the user
   }
 };
 module.exports = { signUpUser, verifyOtp, loginUser, forgotPassword, resetPassword, verifyToken, contactUs };
