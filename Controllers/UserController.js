@@ -156,7 +156,7 @@ const contactUs = async (req, resp) => {
     }
   } catch (error) {
     console.error('Error in contactUs:', error);
-    resp.status(500).json({ message: 'Internal server error' });
+    resp.status(500).json({ message: 'Internal server error internal ' });
   }
 };
 
