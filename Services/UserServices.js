@@ -146,6 +146,9 @@ const ContactUsServices = async(data)=> {
    const {name, userId, message} = data;
 
    try{
+    if (!name || !userId || !message) {
+      return { status: false, message: 'All fields are required.' };
+  }
     const newMessage = new ContactUs({
       name: name,
       id: userId,
