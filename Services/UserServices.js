@@ -142,25 +142,7 @@ const updateUserPassword = async (user, newPassword) => {
   await user.save();
 };
 
-const ContactUsServices = async (data) => {
-  const { name, email, message } = data;
 
-  try {
-   
-      const newMessage = new ContactUs({
-        name: name,
-        email: email,
-        message: message,
-      });
-
-      await newMessage.save();
-      return { status: true, message: 'Message successfully sent' };
-   
-  } catch (error) {
-    console.error('Error in ContactUsServices:', error);
-    return { status: false, message: error };
-  }
-};
 
 module.exports = {
   generateOTP,
@@ -170,6 +152,5 @@ module.exports = {
   verifyUserOtp,
   loginUser,
   updateOtpForUser,
-  updateUserPassword,
-  ContactUsServices
+  updateUserPassword
 };

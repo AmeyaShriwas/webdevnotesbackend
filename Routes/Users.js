@@ -9,8 +9,7 @@ router.post('/login', authController.loginUser);
 router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password', authController.resetPassword);
 router.post('/verify-Token', authController.verifyToken)
-router.post('/contactUs', Auth, authController.contactUs)
-router.get('/getcontactUs', authController.getContactUsMessage)
+
 
 
 module.exports = router;
