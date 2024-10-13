@@ -142,10 +142,15 @@ const verifyToken = async(req, res)=> {
 }
 
 const contactUsController = async(req, resp)=> {
-    const {name, email, message} = req.body;
+    const {name, message} = req.body;
+    const userId = req.user;
 
     try{
-      const result = await authService.ContactUsServices(name, email, message);
+      const findUser = await User.findById({_id: userId});
+      if(!findUser){
+        resp.status(404).json({message: 'user not found'})
+      }
+      const result = await authService.ContactUsServices(name, userId, message);
       if(result.status){
         resp.status(200).json({message: result.message})
       }

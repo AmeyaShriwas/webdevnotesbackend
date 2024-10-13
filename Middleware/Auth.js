@@ -22,7 +22,7 @@ const Auth = async (req, resp, next) => {
     }
 
     // Attach user information to request for use in next middleware
-    req.user = user;
+    req.user = user._id;
     
     // Call next() to proceed if everything is valid
     next();

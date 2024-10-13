@@ -143,12 +143,12 @@ const updateUserPassword = async (user, newPassword) => {
 };
 
 const ContactUsServices = async(data)=> {
-   const {name, email, message} = data;
+   const {name, userId, message} = data;
 
    try{
     const newMessage = new ContactUs({
       name: name,
-      email: email,
+      id: userId,
       message: message
     })
     await newMessage.save()
