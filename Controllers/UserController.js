@@ -65,9 +65,9 @@ const forgotPassword = async (req, res) => {
     const otp = authService.generateOTP();
     await authService.updateOtpForUser(user, otp);
 
-    res.send({ message: "OTP sent to email" });
+    res.status(200).json({ message: "OTP sent to email" });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).json({ message: "Internal server error", error });
   }
 };
 

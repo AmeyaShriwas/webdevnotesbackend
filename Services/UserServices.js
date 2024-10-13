@@ -58,11 +58,10 @@ const sendOtpEmail = async(email, otp) => {
   await Transporter.sendMail(mailOption);
 };
 
-// Find user by email
+// Find user by email service
 const findUserByEmail = async (email) => {
   return await User.findOne({ email });
 };
-
 // Create new user and handle OTP expiration
 const createUser = async (name,email,number, password) => {
   
