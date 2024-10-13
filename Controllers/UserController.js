@@ -137,7 +137,7 @@ const contactUs = async (req, resp) => {
 
   try {
     // Pass data as an object
-    const result = await ContactUsServices({ name, email, message });
+    const result = await authService.ContactUsServices({ name, email, message });
 
     if (!result.status) {
       return resp.status(400).json({ message: result.message });
