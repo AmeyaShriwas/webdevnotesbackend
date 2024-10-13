@@ -147,6 +147,7 @@ const ContactUsServices = async (data) => {
 
   try {
     if (name.length !== 0 && email.length !== 0 && message.length !== 0) {
+      console.log('true')
       const newMessage = new ContactUs({
         name: name,
         email: email,
