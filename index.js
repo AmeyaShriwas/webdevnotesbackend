@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const authRoutes = require('./Routes/Users')
 const adminRoutes = require('./Routes/Admin')
+const ContactUs = require('./Models/ContactUsModel')
 
 dotenv.config()
 
