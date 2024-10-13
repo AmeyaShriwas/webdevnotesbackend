@@ -150,7 +150,7 @@ const contactUs = async (req, resp) => {
     const result = await authService.ContactUsServices({ name, email, message });
 
     if (!result.status) {
-      return resp.status(400).json({ message: result.message });
+      return resp.json({ message: result.message });
     } else {
       return resp.status(200).json({ message: "Message successfully sent" });
     }
