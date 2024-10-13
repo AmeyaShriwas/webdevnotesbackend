@@ -142,26 +142,29 @@ const updateUserPassword = async (user, newPassword) => {
   await user.save();
 };
 
-const ContactUsServices = async(data)=> {
-   const {name, userId, message} = data;
+const ContactUsServices = async (data) => {
+  const { name, userId, message } = data;
 
-   try{
+  try {
     if (!name || !userId || !message) {
       return { status: false, message: 'All fields are required.' };
-  }
+    }
+
+    // Save the new message to the database
     const newMessage = new ContactUs({
       name: name,
       id: userId,
       message: message
-    })
-    await newMessage.save()
-    return {status: true, message: 'Message sent successfully'}
+    });
 
-   }
-   catch(error){
-    return {status: false, message: error}
-   }
-}
+    await newMessage.save();
+    return { status: true, message: 'Message sent successfully' };
+  } catch (error) {
+    console.error(error);
+    return { status: false, message: 'Failed to send message' };
+  }
+};
+
 
 
 module.exports = {

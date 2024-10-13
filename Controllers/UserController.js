@@ -141,27 +141,29 @@ const verifyToken = async(req, res)=> {
       }
 }
 
-const contactUsController = async(req, resp)=> {
-    const {name, message} = req.body;
-    const userId = req.user;
+const contactUsController = async (req, resp) => {
+  const { name, message } = req.body;
+  const userId = req.user;
 
-    try{
-      const findUser = await User.findById({_id: userId});
-      if(!findUser){
-        resp.status(404).json({message: 'user not found'})
-      }
-      const result = await authService.ContactUsServices(name, userId, message);
-      if(result.status){
-        resp.status(200).json({message: result.message})
-      }
-      else{
-        resp.status(400).json({message: result.message})
-      }
+  try {
+    const findUser = await User.findById(userId);
+    if (!findUser) {
+      return resp.status(404).json({ message: 'User not found' });
     }
-    catch(error){
-      resp.status(500).json({message: result.message})
+
+    // Pass arguments as an object to ContactUsServices
+    const result = await authService.ContactUsServices({ name, userId, message });
+    
+    if (result.status) {
+      resp.status(200).json({ message: result.message });
+    } else {
+      resp.status(400).json({ message: result.message });
     }
-}
+  } catch (error) {
+    console.error(error);
+    resp.status(500).json({ message: 'Internal server error' });
+  }
+};
 
 
 module.exports = { signUpUser, verifyOtp, loginUser, forgotPassword, resetPassword, verifyToken, contactUsController};
