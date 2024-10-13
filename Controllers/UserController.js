@@ -141,5 +141,22 @@ const verifyToken = async(req, res)=> {
       }
 }
 
+const contactUsController = async(req, resp)=> {
+    const {name, email, message} = req.body;
 
-module.exports = { signUpUser, verifyOtp, loginUser, forgotPassword, resetPassword, verifyToken};
+    try{
+      const result = await authService.ContactUsServices(name, email, message);
+      if(result.status){
+        resp.status(200).json({message: result.message})
+      }
+      else{
+        resp.status(400).json({message: result.message})
+      }
+    }
+    catch(error){
+      resp.status(500).json({message: result.message})
+    }
+}
+
+
+module.exports = { signUpUser, verifyOtp, loginUser, forgotPassword, resetPassword, verifyToken, contactUsController};
