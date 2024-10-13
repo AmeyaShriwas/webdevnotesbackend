@@ -41,6 +41,16 @@ app.delete('/delete-collection/:collectionName', async (req, res) => {
   }
 });
 
+app.delete('/drop-email-index', dropEmailIndex);
+async function dropEmailIndex(req, res) {
+  try {
+    await ContactUs.collection.dropIndex({ email: 1 });
+    res.status(200).send('Index dropped successfully');
+  } catch (error) {
+    res.status(500).send('Error dropping index: ' + error.message);
+  }
+}
+
 app.use('/', authRoutes)
 
 app.listen(process.env.PORT, ()=> {
