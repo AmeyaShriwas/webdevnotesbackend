@@ -10,6 +10,7 @@ router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password', authController.resetPassword);
 router.post('/verify-Token', authController.verifyToken)
 router.post('/contactUs', Auth, authController.contactUsController)
+router.get('/getContactUs', authController.getContactUsController)
 
 
 

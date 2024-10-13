@@ -165,6 +165,15 @@ const ContactUsServices = async (data) => {
   }
 };
 
+const getContactUsServices = async()=> {
+   try{
+      const data = await ContactUs.find()
+      return {status: true, message: 'successfully get ', data: data}
+   }
+   catch(error){
+    return {status: false, message: 'error in getting ',}
+   }
+}
 
 
 module.exports = {
@@ -176,5 +185,6 @@ module.exports = {
   loginUser,
   updateOtpForUser,
   updateUserPassword,
-  ContactUsServices
+  ContactUsServices,
+  getContactUsServices
 };
