@@ -37,19 +37,29 @@ const verifyOtp = async (req, res) => {
 };
 
 
+// Controller for handling login
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Call the service function to log in the user
     const { user, token, error } = await authService.loginUser(email, password, process.env.JWT_SECRET, "1h");
 
+    // Check for any login errors
     if (error) {
       return res.status(400).json({ error });
     }
 
-    res.status(200).json({ message: 'login successful', token, user, email, number });
+    // Respond with user details, token, and number
+    res.status(200).json({
+      message: 'Login successful',
+      token,
+      user: user.name,
+      email: user.email,
+      number: user.number // Include the number here
+    });
   } catch (error) {
-    res.status(500).json({success: false, error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 };
 
