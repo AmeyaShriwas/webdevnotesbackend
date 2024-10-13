@@ -162,7 +162,7 @@ const contactUs = async (req, resp) => {
 
 const getContactUsMessage = async(req, resp)=> {
     try{
-      const findMessage = await ContactUs.find();
+      const findMessage = await ContactUs.getIndexes();
       resp.json({status: true, data: findMessage})
     }
     catch(error){
