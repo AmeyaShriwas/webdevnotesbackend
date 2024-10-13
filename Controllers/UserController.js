@@ -1,7 +1,6 @@
 const authService = require("./../Services/UserServices");
 const jwt = require('jsonwebtoken')
 const User = require('./../Models/UserModel');
-const ContactUs = require("../Models/ContactUs");
 
 const signUpUser = async (req, res) => {
   const { name,email,number, password } = req.body;

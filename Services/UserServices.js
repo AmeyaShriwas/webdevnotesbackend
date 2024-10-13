@@ -4,7 +4,6 @@ const User = require("./../Models/UserModel");
 const jwt = require('jsonwebtoken');
 const Transporter = require('./../Config');
 const crypto = require('crypto')
-const ContactUs  = require('./../Models/ContactUs')
 
 // Generate OTP
 const generateOTP = () => {
