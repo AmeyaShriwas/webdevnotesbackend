@@ -146,8 +146,7 @@ const ContactUsServices = async (data) => {
   const { name, email, message } = data;
 
   try {
-    if (name.length !== 0 && email.length !== 0 && message.length !== 0) {
-      console.log('true')
+   
       const newMessage = new ContactUs({
         name: name,
         email: email,
@@ -156,9 +155,7 @@ const ContactUsServices = async (data) => {
 
       await newMessage.save();
       return { status: true, message: 'Message successfully sent' };
-    } else {
-      return { status: false, message: 'Please fill in all required fields' };
-    }
+   
   } catch (error) {
     console.error('Error in ContactUsServices:', error);
     return { status: false, message: 'Internal server error get' };
