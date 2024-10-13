@@ -12,25 +12,7 @@ const generateOTP = () => {
 };
 
 // Send OTP Email
-const sendOtpEmail = async(email, otp) => {
-
-  // const resetToken = crypto.randomBytes(32).toString('hex')
-  // const resetTokenExpires = Date.now() + 5 * 60 * 1000
-    
-
-  // // Save the token and expiration time in the user's record
-  // const user = await User.findOne({ email });
-  // if (!user) {
-  //   throw new Error('User not found');
-  // }
-
-  // user.resetPasswordToken = resetToken;
-  // user.resetPasswordExpires = resetTokenExpires;
-  // await user.save()
-
-  // const resetLink = `https://ameyashriwas.in/resetPassword?token=${resetToken}`; // Adjust port as necessary
-
-
+const sendOtpEmail = async (email, otp, username) => {
   const mailOption = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -42,21 +24,18 @@ const sendOtpEmail = async(email, otp) => {
   
   OTP Code: ${otp}
   
-  Alternatively, you can reset your password by clicking the link below:
-  
-  Reset Link: 
-  
-  **Note**: This OTP and link are valid for the next 5 minutes. If you did not request a password reset, please ignore this email.
+  **Note**: This OTP is valid for the next 5 minutes. If you did not request a password reset, please ignore this email.
   
   If you need further assistance, feel free to reach out to our support team.
   
   Best regards,  
-  The Webdev Notes
+  The Webdev Notes Team
     `,
   };
   
   await Transporter.sendMail(mailOption);
 };
+
 
 // Find user by email service
 const findUserByEmail = async (email) => {
