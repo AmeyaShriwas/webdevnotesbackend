@@ -161,7 +161,7 @@ const ContactUsServices = async (data) => {
     return { status: true, message: 'Message sent successfully' };
   } catch (error) {
     console.error(error);
-    return { status: false, message: 'Failed to send message' };
+    return { status: false, message: error };
   }
 };
 
