@@ -165,19 +165,20 @@ const contactUsController = async (req, resp) => {
   }
 };
 
-const getContactUsController = async(req, resp)=> {
-  try{
+const getContactUsController = async(req, resp) => {
+  try {
     const result = await authService.getContactUsServices()
-    if(!result.status){
+    if(!result.status) {
       resp.status(400).json({status: false, message: 'error in getting messages'})
-    }
-    else{
-      resp.status(200).json({status: true, message: 'successfully get messages', data})
+    } else {
+      // Access result.data properly here
+      resp.status(200).json({status: true, message: 'successfully got messages', data: result.data})
     }
   }
-  catch(error){
+  catch(error) {
     resp.status(400).json({status: false, message: 'error in getting messages'})
   }
 }
+
 
 module.exports = { signUpUser, verifyOtp, loginUser, forgotPassword, resetPassword, verifyToken, contactUsController, getContactUsController};
