@@ -2,16 +2,13 @@ const mongoose = require('mongoose')
 
 const ContactUsSchema = new mongoose.Schema({
     name: {
-        type: String,
-        required: true
+        type: String
     },
     email: {
-        type: String,
-        required: true
+        type: String
     },
     message: {
-        type: String,
-        required: true
+        type: String
     }
 })
 
