@@ -76,6 +76,10 @@ router.post('/verify', async (req, resp) => {
           razorpay_payment_id,
           razorpay_signature,
         });
+
+        order.razorpay_payment_id = razorpay_payment_id;
+        order.razorpay_signature = razorpay_signature;
+        order.status = 'success';
         await order.save();
   
         await payment.save();
