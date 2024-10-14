@@ -9,10 +9,19 @@ const ContactUs = require('./Models/ContactUsModel')
 
 dotenv.config()
 
-// Use CORS middleware
+const allowedOrigins = ['http://localhost:3000', 'https://ameyashriwas.in'];
+
 app.use(cors({
-  origin: 'https://ameyashriwas.in', // Allow requests from this origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      // If the origin is not in the allowedOrigins array, return an error
+      return callback(new Error('Not allowed by CORS'));
+    }
+    return callback(null, true);
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true // If you need to allow credentials
 }));
 app.use(express.json())
