@@ -36,37 +36,37 @@ router.post('/order', (req, resp)=> {
 })
 
 
-router.post('/verify', async(req, resp)=> {
-    const {razorpay_order_id, razorpay_payment_id, razorpay_signature} = req.body
-
-    console.log('req.body', req.body)
-    try{
-        const sign = razorpay_order_id + "|" + razorpay_payment_id
-
-        const expectedSign = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET)
+router.post('/verify', async (req, resp) => {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+  
+    console.log('req.body', req.body);
+    try {
+      const sign = razorpay_order_id + "|" + razorpay_payment_id;
+  
+      const expectedSign = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET)
         .update(sign.toString())
-        .digest("hex")
-
-        const isAuthentic = expectedSign === razorpay_signature
-
-        if(isAuthentic){
-            const payment = new Payment({
-                razorpay_order_id,
-                razorpay_payment_id,
-                razorpay_signature
-
-            })
-
-            await payment.save()
-
-            resp.json({message: 'Payment Successfully'})
-        }
-
+        .digest("hex");
+  
+      const isAuthentic = expectedSign === razorpay_signature;
+  
+      if (isAuthentic) {
+        const payment = new Payment({
+          razorpay_order_id,
+          razorpay_payment_id,
+          razorpay_signature,
+        });
+  
+        await payment.save();
+  
+        return resp.json({ message: 'Payment Successfully' });
+      } else {
+        return resp.status(400).json({ message: 'Payment verification failed' });
+      }
+    } catch (error) {
+      resp.status(500).json({ message: "Internal Server Error" });
+      console.log('error', error);
     }
-    catch(error){
-        resp.status(500).json({message: "Internal Server Error"})
-        console.log('error', error)
-    }
-})
+  });
+  
 
 module.exports = router
