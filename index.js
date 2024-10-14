@@ -9,7 +9,12 @@ const ContactUs = require('./Models/ContactUsModel')
 
 dotenv.config()
 
-app.use(cors({origin: '*'}))
+// Use CORS middleware
+app.use(cors({
+  origin: 'https://ameyashriwas.in', // Allow requests from this origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
+  credentials: true // If you need to allow credentials
+}));
 app.use(express.json())
 
 // Connect to MongoDB using environment variable
