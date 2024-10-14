@@ -21,38 +21,10 @@ app.get('/', async(req, resp)=> {
     resp.send('api is working')
 })
 
-app.delete('/delete-collection/:collectionName', async (req, res) => {
-  const { collectionName } = req.params;
 
-  try {
-      const db = mongoose.connection.db;
-      const result = await db.dropCollection(collectionName);
-
-      if (result) {
-          return res.status(200).json({ message: `${collectionName} collection deleted successfully.` });
-      } else {
-          return res.status(404).json({ message: `Collection ${collectionName} not found.` });
-      }
-  } catch (error) {
-      if (error.code === 26) {
-          return res.status(404).json({ message: `Collection ${collectionName} does not exist.` });
-      } else {
-          return res.status(500).json({ message: `Error deleting collection: ${error.message}` });
-      }
-  }
-});
-
-app.delete('/drop-email-index', dropEmailIndex);
-async function dropEmailIndex(req, res) {
-  try {
-    await ContactUs.collection.dropIndex({ email: 1 });
-    res.status(200).send('Index dropped successfully');
-  } catch (error) {
-    res.status(500).send('Error dropping index: ' + error.message);
-  }
-}
 
 app.use('/', authRoutes)
+app.use('/api', adminRoutes)
 
 app.listen(process.env.PORT, ()=> {
     console.log(`connected to port, ${process.env.PORT}`)
