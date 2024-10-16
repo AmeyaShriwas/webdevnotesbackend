@@ -13,19 +13,6 @@ router.post('/verify-Token', authController.verifyToken)
 router.post('/contactUs', Auth, authController.contactUsController)
 router.get('/getContactUs', authController.getContactUsController)
 
-router.get('/getalluser', async(req, resp)=> {
-    try{
-        const allUsers = await User.find()
-        resp.json({user: allUsers})
-    }
-    catch(error){
-        resp.json({message: 'errro'})
-    }
-})
-
-
-
-
 
 
 module.exports = router;

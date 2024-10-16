@@ -38,6 +38,8 @@ router.post('/admin/grantAdminAccess', Auth, AdminController.AdminAccessControll
 router.post('/order', Auth, AdminController.createOrder);
 router.post('/verify', AdminController.verifyPayment);
 router.get('/getAllOrders', AdminController.getAllOrders);
+router.post('/admin/login', AdminController.AdminloginUser);
+
 
 // router.post('/upload', upload.single('pdf'), pdfController.uploadPdf);
 

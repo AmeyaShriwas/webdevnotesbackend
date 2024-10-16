@@ -1,6 +1,7 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const User = require('../Models/UserModel');
+const bcrypt = require('bcryptjs')
 
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -50,8 +51,54 @@ const AdminGrantAccessService = async (userId) => {
     }
 };
 
+
+// Auth Service for logging in the user
+const AdminServicesloginUser = async (email, password, secret, expiresIn) => {
+    try {
+      // Find the user in the database by email
+      const user = await User.findOne({ email });
+  
+      // If no user found, return an error
+      if (!user) {
+        return { error: "Invalid login credentials" };
+      }
+  
+      // Check if the user is verified
+      if (!user.isVerified) {
+        throw new Error('User is not verified');
+      }
+  
+      // Compare the provided password with the hashed password in the database
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return { error: "Invalid login credentials" };
+      }
+
+      if(user.role !== 'admin'){
+         return {error: "invalid admin credentials"}
+      }
+  
+      // Generate a JWT token for the logged-in user
+      const token = jwt.sign({ _id: user._id.toString() }, secret, { expiresIn: '7d' });
+  
+      // Return the user details, including name, email, and number
+      return {
+        message: 'Login successful',
+        token,
+        user: {
+          name: user.name,
+          email: user.email,
+          number: user.number // Make sure number is included here
+        }
+      };
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
 module.exports = {
     createRazorpayOrder,
     verifyRazorpaySignature,
-    AdminGrantAccessService
+    AdminGrantAccessService,
+    AdminServicesloginUser
 };
