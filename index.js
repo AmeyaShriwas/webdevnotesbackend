@@ -8,28 +8,7 @@ const adminRoutes = require('./Routes/Admin');
 
 dotenv.config();
 
-// List of allowed origins
-const allowedOrigins = ['https://dashboard.ameyashriwas.in', 'https://ameyashriwas.in'];
-
-// Updated CORS configuration to handle preflight requests
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin, like mobile apps or Postman
-    if (!origin) return callback(null, true);
-
-    // Check if the request's origin is in the allowed origins array
-    if (allowedOrigins.indexOf(origin) === -1) {
-      return callback(new Error('Not allowed by CORS'));
-    }
-
-    // If the origin is allowed, continue
-    return callback(null, true);
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
-  optionsSuccessStatus: 200, // Ensure preflight requests return status 200
-}));
+app.use(cors({origin: '*'}))
 
 app.use(express.json());
 
