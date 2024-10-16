@@ -105,29 +105,21 @@ const UploadPdfService = async (file, fileData) => {
     
     try {
       // Validate if the pdfName is valid
-    //   if (!fixedCategories.includes(pdfName)) {
-    //     return { status: false, message: `Invalid pdfName. Allowed values are: ${fixedCategories.join(', ')}` };
-    //   }
+      if (!fixedCategories.includes(pdfName)) {
+        return { status: false, message: `Invalid pdfName. Allowed values are: ${fixedCategories.join(', ')}` };
+      }
   
-    //   // Check if a PDF with the same name already exists
-    //   const existingPdf = await PDF.findOne({ pdfName });
-    //   if (existingPdf) {
-    //     return { status: false, message: 'PDF with this name already exists' };
-    //   }
-
-    //   const newObj = {
-    //     pdfName: pdfName,
-    //     pdfPrice: pdfPrice,
-    //     pdfLink: filePath.path // Store the file path in the database
-    //   }
-      return { status: true, message: 'PDF uploaded successfully', data: filePath.path };
-
+      // Check if a PDF with the same name already exists
+      const existingPdf = await PDF.findOne({ pdfName });
+      if (existingPdf) {
+        return { status: false, message: 'PDF with this name already exists' };
+      }
   
       // Create a new PDF entry in the database
       const newPdfData = new PDF({
         pdfName: pdfName,
         pdfPrice: pdfPrice,
-        pdfLink: filePath.path // Store the file path in the database
+        pdfLink: file.path
       });
 
   
