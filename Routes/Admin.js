@@ -49,7 +49,7 @@ router.post('/admin/login', AdminController.AdminloginUser);
 
 
 // router.post('/upload', upload.single('file'), AdminController.uploadPdf);
-app.post('/upload', upload.single('file'), (req, res) => {
+router.post('/upload', upload.single('file'), (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
