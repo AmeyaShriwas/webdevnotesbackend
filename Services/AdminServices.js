@@ -115,12 +115,12 @@ const UploadPdfService = async (file, fileData) => {
         return { status: false, message: 'PDF with this name already exists' };
       }
 
-      const newObj = {
-        pdfName: pdfName,
-        pdfPrice: pdfPrice,
-        pdfLink: filePath.path // Store the file path in the database
-      }
-      return { status: true, message: 'PDF uploaded successfully', data: newObj };
+    //   const newObj = {
+    //     pdfName: pdfName,
+    //     pdfPrice: pdfPrice,
+    //     pdfLink: filePath.path // Store the file path in the database
+    //   }
+      return { status: true, message: 'PDF uploaded successfully', data: filePath.path };
 
   
       // Create a new PDF entry in the database
