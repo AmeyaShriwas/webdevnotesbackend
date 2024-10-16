@@ -1,6 +1,6 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
-const User = require('../Models/ContactUsModel');
+const User = require('../Models/UserModel');
 
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -37,7 +37,6 @@ const verifyRazorpaySignature = (razorpay_order_id, razorpay_payment_id, razorpa
 const AdminGrantAccessService = async (userId) => {
     console.log('id', userId)
     try {
-        return { status: true, message: 'User role updated to admin', id: userId };
         const findUser = await User.findOne({_id: userId});  // Directly passing the userId
         if (findUser) {
             findUser.role = 'admin';
