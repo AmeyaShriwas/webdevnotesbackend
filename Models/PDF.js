@@ -9,7 +9,7 @@ const PdfSchema = new mongoose.Schema({
     required: true,
   },
   pdfPrice: {
-    type: Number,
+    type: String,
     required: true, // Ensure price is provided
   },
   pdfLink: {
