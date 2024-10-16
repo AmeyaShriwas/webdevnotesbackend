@@ -4,6 +4,8 @@ const User = require('../Models/UserModel');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 const PDF = require('./../Models/PDF')
+const path = require('path'); // Ensure path is imported
+
 
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
