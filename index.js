@@ -9,7 +9,7 @@ const adminRoutes = require('./Routes/Admin');
 dotenv.config();
 
 // List of allowed origins
-const allowedOrigins = ['http://localhost:3000', 'https://ameyashriwas.in', 'https://dashboard.ameyashriwas.in'];
+const allowedOrigins = ['https://dashboard.ameyashriwas.in', 'https://ameyashriwas.in'];
 
 // Updated CORS configuration to handle preflight requests
 app.use(cors({
