@@ -42,6 +42,6 @@ router.get('/getAllOrders', AdminController.getAllOrders);
 router.post('/admin/login', AdminController.AdminloginUser);
 
 
-router.post('/upload', upload.single('pdf'), AdminController.uploadPdf);
+router.post('/upload', upload.single('file'), AdminController.uploadPdf);
 
 module.exports = router;
