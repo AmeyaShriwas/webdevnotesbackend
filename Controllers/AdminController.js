@@ -136,7 +136,7 @@ const uploadPdf = async (req, resp) => {
   
     } catch (error) {
       console.error('Error uploading PDF:', error);
-      return resp.status(500).json({ status: false, message: 'Internal server error' });
+      return resp.status(500).json({ status: false, message: error });
     }
   };
 
