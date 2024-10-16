@@ -7,30 +7,31 @@ const path = require('path');
 
 // Multer config for storing PDFs
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, '/uploads'); // Directory to store PDFs
-    },
-    filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Store the file with a unique name
-    }
-  });
+  destination: function (req, file, cb) {
+    cb(null, './uploads'); // Ensure correct file path
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Store the file with a unique name
+  }
+});
   
   // File filter to allow only PDFs
-  const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'application/pdf') {
-      cb(null, true);
-    } else {
-      cb(new Error('Only PDF files are allowed!'), false);
-    }
-  };
-  
-  // Limit file size to 5MB
-  const upload = multer({
-    storage: storage,
-    limits: { fileSize: 1024 * 1024 * 20 }, // 20MB limit
-    fileFilter: fileFilter,
-  });
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'application/pdf') {
+    cb(null, true);
+  } else {
+    cb(new Error('Only PDF files are allowed!'), false);
+  }
+};
+
+// Limit file size to 20MB
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1024 * 1024 * 20 }, // 20MB limit
+  fileFilter: fileFilter,
+});
+
   
 
 

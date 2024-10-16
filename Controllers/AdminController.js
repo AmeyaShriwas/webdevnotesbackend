@@ -114,31 +114,31 @@ const AdminloginUser = async (req, res) => {
   };
 
 
-  const uploadPdf = async (req, resp) => {
+ // Controller for handling PDF upload
+const uploadPdf = async (req, resp) => {
     try {
-      const file = req.file; // Single file upload uses req.file
-      const fileData = req.body;
+      const file = req.file; // File uploaded through Multer
+      const fileData = req.body; // Contains pdfName and pdfPrice
   
-      // Check if file and fileData are provided
-      if (!file || !fileData) {
+      // Check if both file and fileData are provided
+      if (!file || !fileData.pdfName || !fileData.pdfPrice) {
         return resp.status(400).json({ status: false, message: 'Missing file or required data' });
       }
   
       // Call the service to handle PDF upload
-      const result = await authService.UploadPdfService(file, fileData);
-      
+      const result = await UploadPdfService(file, fileData);
+  
       if (result.status) {
-        resp.status(201).json({ status: true, message: 'PDF uploaded successfully' });
+        return resp.status(201).json({ status: true, message: result.message });
       } else {
-        resp.status(400).json({ status: false, message: result.message });
+        return resp.status(400).json({ status: false, message: result.message });
       }
   
     } catch (error) {
-      console.error(error);
-      resp.status(500).json({ status: false, message: 'Internal server error' });
+      console.error('Error uploading PDF:', error);
+      return resp.status(500).json({ status: false, message: 'Internal server error' });
     }
   };
-
 
 module.exports = {
     createOrder,
