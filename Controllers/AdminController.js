@@ -1,6 +1,7 @@
 const AdminServices = require('../Services/AdminServices');
 const Order = require('../Models/Order');
 const Payment = require('../Models/Payment');
+const PDF  = require('./../Models/PDF')
 
 const createOrder = async (req, resp) => {
     const { amount, ItemsCart } = req.body; // Assuming ItemsCart is an array of PDFs
@@ -112,10 +113,38 @@ const AdminloginUser = async (req, res) => {
     }
   };
 
+
+  const uploadPdf = async (req, resp) => {
+    try {
+      const file = req.file; // Single file upload uses req.file
+      const fileData = req.body;
+  
+      // Check if file and fileData are provided
+      if (!file || !fileData) {
+        return resp.status(400).json({ status: false, message: 'Missing file or required data' });
+      }
+  
+      // Call the service to handle PDF upload
+      const result = await authService.UploadPdfService(file, fileData);
+      
+      if (result.status) {
+        resp.status(201).json({ status: true, message: 'PDF uploaded successfully' });
+      } else {
+        resp.status(400).json({ status: false, message: result.message });
+      }
+  
+    } catch (error) {
+      console.error(error);
+      resp.status(500).json({ status: false, message: 'Internal server error' });
+    }
+  };
+
+  
 module.exports = {
     createOrder,
     verifyPayment,
     getAllOrders,
     AdminAccessController,
-    AdminloginUser
+    AdminloginUser,
+    uploadPdf
 };

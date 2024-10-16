@@ -96,9 +96,44 @@ const AdminServicesloginUser = async (email, password, secret, expiresIn) => {
     }
   };
 
+  const UploadPdfService = async (file, fileData) => {
+    const { pdfName, pdfPrice } = fileData;
+    
+    try {
+      // Check if the provided pdfName is valid (from fixed categories)
+      const validCategories = ['HTML', 'CSS', 'JavaScript', 'ReactJS', 'NodeJS', 'ExpressJS', 'MongoDB', 'MySQL', 'Bootstrap'];
+      
+      if (!validCategories.includes(pdfName)) {
+        return { status: false, message: `Invalid pdfName. Allowed values are: ${validCategories.join(', ')}` };
+      }
+  
+      // Check if the pdfName already exists in the database
+      const existingPdf = await PDF.findOne({ pdfName });
+      if (existingPdf) {
+        return { status: false, message: 'PDF with this name already exists' };
+      }
+  
+      // Create a new PDF entry in the database
+      const newPdfData = new PDF({
+        pdfName,
+        pdfPrice,
+        pdfLink: file.path // Store the file path in the database
+      });
+  
+      await newPdfData.save();
+      return { status: true, message: 'PDF uploaded successfully' };
+  
+    } catch (error) {
+      console.error(error);
+      return { status: false, message: 'Internal server error' };
+    }
+  };
+  
+
 module.exports = {
     createRazorpayOrder,
     verifyRazorpaySignature,
     AdminGrantAccessService,
-    AdminServicesloginUser
+    AdminServicesloginUser,
+    UploadPdfService
 };
