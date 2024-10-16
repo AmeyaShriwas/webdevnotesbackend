@@ -101,6 +101,7 @@ const AdminServicesloginUser = async (email, password, secret, expiresIn) => {
  // Upload PDF service logic
 const UploadPdfService = async (file, fileData) => {
     const { pdfName, pdfPrice } = fileData;
+    const filePath = file
     
     try {
       // Validate if the pdfName is valid
@@ -116,9 +117,9 @@ const UploadPdfService = async (file, fileData) => {
   
       // Create a new PDF entry in the database
       const newPdfData = new PDF({
-        pdfName,
-        pdfPrice,
-        pdfLink: file.path // Store the file path in the database
+        pdfName: pdfName,
+        pdfPrice: pdfPrice,
+        pdfLink: filePath.path // Store the file path in the database
       });
   
       await newPdfData.save();
