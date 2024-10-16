@@ -93,7 +93,7 @@ const AdminloginUser = async (req, res) => {
   
     try {
       // Call the service function to log in the user
-      const { user, token, error } = await authService.AdminServicesloginUser(email, password, process.env.JWT_SECRET, "1h");
+      const { user, token, error } = await AdminServices.AdminServicesloginUser(email, password, process.env.JWT_SECRET, "1h");
   
       // Check for any login errors
       if (error) {
@@ -139,7 +139,7 @@ const AdminloginUser = async (req, res) => {
     }
   };
 
-  
+
 module.exports = {
     createOrder,
     verifyPayment,
