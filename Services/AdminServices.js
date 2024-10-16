@@ -34,22 +34,20 @@ const verifyRazorpaySignature = (razorpay_order_id, razorpay_payment_id, razorpa
     return expectedSign === razorpay_signature;
 };
 
-const AdminGrantAceessService = async(id)=> {
-  const userId = id
-  try{
-    const findUser = await User.findById({_id: userId});
-    if(findUser){
-        findUser.role = 'admin';
-        await findUser.save()
+const AdminGrantAccessService = async (userId) => {
+    try {
+        const findUser = await User.findById(userId);  // Directly passing the userId
+        if (findUser) {
+            findUser.role = 'admin';
+            await findUser.save();
+            return { status: true, message: 'User role updated to admin' };
+        } else {
+            return { status: false, message: 'Failed to find user' };
+        }
+    } catch (error) {
+        return { status: false, message: 'Internal server error' };
     }
-    else{
-        return {status: false, message: 'failed to find id'}
-    }
-
-  }catch(error){
-    return {status: false, message: 'Interna server error'}
-  }
-}
+};
 
 module.exports = {
     createRazorpayOrder,

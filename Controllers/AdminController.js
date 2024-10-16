@@ -70,23 +70,19 @@ const getAllOrders = async (req, resp) => {
     }
 };
 
-const AdminAccessController = async(req, resp)=> {
-    const useId = req.body;
-    try{
-      const AccessGranted = await AdminServices.AdminGrantAceessService(useId)
-      if(AccessGranted.status){
-        resp.status(200).json({status: true,message: 'Admin access granted to user'})
-      }
-      else{
-        resp.status(400).json({status: false,message: 'error in granting access'})
-      }
-
-
+const AdminAccessController = async (req, resp) => {
+    const userId = req.user; // Use the user ID extracted from the token
+    try {
+        const accessGranted = await AdminServices.AdminGrantAccessService(userId);
+        if (accessGranted.status) {
+            resp.status(200).json({ status: true, message: 'Admin access granted to user' });
+        } else {
+            resp.status(400).json({ status: false, message: accessGranted.message || 'Error in granting access' });
+        }
+    } catch (error) {
+        resp.status(500).json({ status: false, message: 'Internal server error' });
     }
-    catch(error){
-        resp.status(500).json({status: false,message: 'error in granting access'})
-    }
-}
+};
 
 module.exports = {
     createOrder,
