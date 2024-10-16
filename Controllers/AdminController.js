@@ -129,7 +129,7 @@ const uploadPdf = async (req, resp) => {
       const result = await AdminServices.UploadPdfService(file, fileData);
   
       if (result.status) {
-        return resp.status(201).json({ status: true, message: result.message, data: result.data });
+        return resp.status(201).json({ status: true, message: result.message});
       } else {
         return resp.status(400).json({ status: false, message: result.message });
       }
