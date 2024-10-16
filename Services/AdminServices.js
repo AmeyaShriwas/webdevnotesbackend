@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const User = require('../Models/UserModel');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
-const PDF  = require('./../Models/PDF')
+const PDF = require('./../Models/PDF')
 
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -114,6 +114,14 @@ const UploadPdfService = async (file, fileData) => {
       if (existingPdf) {
         return { status: false, message: 'PDF with this name already exists' };
       }
+
+      const newObj = {
+        pdfName: pdfName,
+        pdfPrice: pdfPrice,
+        pdfLink: filePath.path // Store the file path in the database
+      }
+      return { status: true, message: 'PDF uploaded successfully', data: newObj };
+
   
       // Create a new PDF entry in the database
       const newPdfData = new PDF({
