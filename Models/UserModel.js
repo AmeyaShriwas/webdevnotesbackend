@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    role: {
+        type: String,
+        default: 'User'
+    },
     isDelete: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now },
 });

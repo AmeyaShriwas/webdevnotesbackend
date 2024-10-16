@@ -1,107 +1,44 @@
-const express = require('express')
-const router = express()
-const Razorpay = require('razorpay')
-const crypto = require('crypto')
-require('dotenv').config()
-const Payment = require('./../Models/Payment')
-const Order  = require('./../Models/Order')
-const Auth = require('./../Middleware/Auth')
+const express = require('express');
+const router = express.Router();
+const AdminController = require('./../Controllers/AdminController');
+const Auth = require('./../Middleware/Auth');
+const multer = require('multer');
+const path = require('path');
 
-const razorpayInstance = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_SECRET
-})
-
-router.post('/order', Auth, async(req, resp)=> {
-    const { amount, ItemsCart } = req.body; // Assuming ItemsCart is the array of PDFs
-    const userId = req.user;
-
-    try {
-        const options = {
-            amount: Number(amount * 100), // Amount in paise (for INR)
-            currency: "INR",
-            receipt: crypto.randomBytes(10).toString("hex") // Unique receipt
-        };
-
-        // Create Razorpay order
-        razorpayInstance.orders.create(options, async (error, order) => {
-            if (error) {
-                console.log('error', error);
-                return resp.status(500).json({ message: 'Something went wrong' });
-            }
-
-            // Save order to the database
-            const newOrder = new Order({
-                user: userId, // Assuming the user is authenticated
-                amount: amount, // Amount in rupees
-                pdfs: ItemsCart, // ItemsCart should be an array of PDF names
-                razorpay_order_id: order.id,
-                status: 'pending', // Set initial status as pending
-            });
-
-            await newOrder.save(); // Save the order in MongoDB
-
-            resp.status(200).json({ data: order });
-            console.log('order', order);
-        });
-    } catch (error) {
-        resp.status(500).json({ message: 'Internal Server Error' });
-        console.log('error', error);
-    }
-});
-
-
-
-router.post('/verify', async (req, resp) => {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-  
-    console.log('req.body', req.body);
-    try {
-      const sign = razorpay_order_id + "|" + razorpay_payment_id;
-  
-      const expectedSign = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET)
-        .update(sign.toString())
-        .digest("hex");
-  
-      const isAuthentic = expectedSign === razorpay_signature;
-  
-      if (isAuthentic) {
-        const order = await Order.findOne({ razorpay_order_id });
-
-        if (!order) {
-          return resp.status(404).json({ message: 'Order not found' });
-        }
-        const payment = new Payment({
-          razorpay_order_id,
-          razorpay_payment_id,
-          razorpay_signature,
-        });
-
-        order.razorpay_payment_id = razorpay_payment_id;
-        order.razorpay_signature = razorpay_signature;
-        order.status = 'success';
-        await order.save();
-  
-        await payment.save();
-  
-        return resp.json({ message: 'Payment Successfully' });
-      } else {
-        return resp.status(400).json({ message: 'Payment verification failed' });
-      }
-    } catch (error) {
-      resp.status(500).json({ message: "Internal Server Error" });
-      console.log('error', error);
+// Multer config for storing PDFs
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/pdf'); // Directory to store PDFs
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Store the file with a unique name
     }
   });
   
-  router.get('/getAllOrders', async(req, resp)=> {
-    try{
-        const AllOrders = await Order.find();
-        resp.status(200).json({status: true, message: 'sucessfully get it', order: AllOrders})
+  // File filter to allow only PDFs
+  const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'application/pdf') {
+      cb(null, true);
+    } else {
+      cb(new Error('Only PDF files are allowed!'), false);
     }
-    catch(error){
-        resp.status(400).json({status: false, message: 'error in getting orders'})
-    }
-  })
+  };
+  
+  // Limit file size to 5MB
+  const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1024 * 1024 * 20 }, // 20MB limit
+    fileFilter: fileFilter,
+  });
+  
 
-module.exports = router
+
+router.post('./admin/grantAdminAccess', Auth, AdminController.AdminAccessController)
+router.post('/order', Auth, AdminController.createOrder);
+router.post('/verify', AdminController.verifyPayment);
+router.get('/getAllOrders', AdminController.getAllOrders);
+
+router.post('/upload', upload.single('pdf'), pdfController.uploadPdf);
+
+module.exports = router;
