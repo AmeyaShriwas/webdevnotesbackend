@@ -7,17 +7,17 @@ const PdfSchema = new mongoose.Schema({
   pdfName: {
     type: String,
     required: true,
-    unique: true, // Ensure uniqueness to avoid duplicates
-    enum: fixedCategories, // Ensure pdfName is one of the fixed categories
   },
   pdfPrice: {
     type: Number,
-    required: true,
+    required: true, // Ensure price is provided
   },
   pdfLink: {
-    type: String, // Store the file path or URL
+    type: String, // Store the file path or URL to the PDF
     required: true,
   }
 });
 
-module.exports = mongoose.model('PDF', PdfSchema);
+const PDF = mongoose.model('PDF', PdfSchema)
+
+module.exports = PDF
