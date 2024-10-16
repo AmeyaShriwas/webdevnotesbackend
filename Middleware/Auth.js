@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
 const User = require('./../Models/UserModel');
+const mongoose = require('mongoose')
 
 const Auth = async (req, resp, next) => {
-  const authHeader = req.headers['authorization']; // Lowercase 'authorization'
+  const authHeader = req.headers.authorization; // Lowercase 'authorization'
+  // console.log('token', req.headers.authorization)
   
   try {
     if (!authHeader) {
@@ -10,12 +12,15 @@ const Auth = async (req, resp, next) => {
     }
 
     const token = authHeader.replace('Bearer ', '').trim(); // Extract token from 'Bearer '
+    console.log('token', token)
 
     // Verify and decode token
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // Use secret key from environment variables
+    console.log('decoded', decoded)
 
-    // Find user by _id from the token
-    const user = await User.findById(decoded._id);
+    const userId = new mongoose.Types.ObjectId(decoded._id);    // Find user by _id from the token
+    const user = await User.findOne({_id: userId});
+    console.log('user', user)
 
     if (!user) {
       return resp.status(401).json({ status: false, message: 'User not found' });

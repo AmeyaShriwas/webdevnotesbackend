@@ -72,6 +72,7 @@ const getAllOrders = async (req, resp) => {
 
 const AdminAccessController = async (req, resp) => {
     const userId = req.user; // Use the user ID extracted from the token
+    console.log('id', userId)
     try {
         const accessGranted = await AdminServices.AdminGrantAccessService(userId);
         if (accessGranted.status) {
