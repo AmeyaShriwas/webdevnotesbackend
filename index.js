@@ -41,6 +41,22 @@ app.delete('/api/delete-collection', async (req, res) => {
       res.status(500).send('Error deleting collection: ' + error.message);
   }
 });
+
+app.get('/api/collections', async (req, res) => {
+  try {
+      // Get the list of collections
+      const collections = await mongoose.connection.db.listCollections().toArray();
+
+      // Extract the collection names
+      const collectionNames = collections.map(collection => collection.name);
+
+      res.status(200).json(collectionNames);
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Error retrieving collections: ' + error.message);
+  }
+});
+
 // Define routes
 app.use('/', authRoutes);
 app.use('/api', adminRoutes);
