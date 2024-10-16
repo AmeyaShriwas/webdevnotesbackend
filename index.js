@@ -46,6 +46,8 @@ app.get('/', (req, res) => {
 // Define routes
 app.use('/', authRoutes);
 app.use('/api', adminRoutes);
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 
 // Start the server
 app.listen(process.env.PORT, () => {
