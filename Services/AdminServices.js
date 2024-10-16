@@ -101,7 +101,8 @@ const AdminServicesloginUser = async (email, password, secret, expiresIn) => {
  // Upload PDF service logic
 const UploadPdfService = async (file, fileData) => {
     const { pdfName, pdfPrice } = fileData;
-    const filePath = file
+    const path = file.path
+    
     
     try {
       // Validate if the pdfName is valid
@@ -119,7 +120,7 @@ const UploadPdfService = async (file, fileData) => {
       const newPdfData = new PDF({
         pdfName: pdfName,
         pdfPrice: pdfPrice,
-        pdfLink: file.path
+        pdfLink: path
       });
 
   
