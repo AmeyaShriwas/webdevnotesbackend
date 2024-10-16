@@ -34,7 +34,7 @@ const storage = multer.diskStorage({
   
 
 
-router.post('./admin/grantAdminAccess', Auth, AdminController.AdminAccessController)
+router.post('/admin/grantAdminAccess', Auth, AdminController.AdminAccessController)
 router.post('/order', Auth, AdminController.createOrder);
 router.post('/verify', AdminController.verifyPayment);
 router.get('/getAllOrders', AdminController.getAllOrders);
