@@ -121,7 +121,6 @@ const UploadPdfService = async (file, fileData) => {
         pdfPrice: pdfPrice,
         pdfLink: filePath.path // Store the file path in the database
       });
-      return { status: true, message: 'PDF uploaded successfully', data: newPdfData };
 
   
       await newPdfData.save();
