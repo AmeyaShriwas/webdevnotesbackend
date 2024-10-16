@@ -129,7 +129,7 @@ const UploadPdfService = async (file, fileData) => {
   
     } catch (error) {
       console.error('Error while saving PDF:', error);
-      return { status: false, message: error };
+      return { status: false, message: 'kaun sa message gya' };
     }
   };
 
