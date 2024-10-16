@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const authRoutes = require('./Routes/Users');
 const adminRoutes = require('./Routes/Admin');
+const pdfFind = require('./Models/PDF')
 
 dotenv.config();
 
@@ -45,12 +46,11 @@ app.delete('/api/delete-collection', async (req, res) => {
 app.get('/api/collections', async (req, res) => {
   try {
       // Get the list of collections
-      const collections = await mongoose.connection.db.listCollections().toArray();
+      const collections = await pdfFind.find()
 
-      // Extract the collection names
-      const collectionNames = collections.map(collection => collection.name);
+    
 
-      res.status(200).json(collectionNames);
+      res.status(200).json(collections);
   } catch (error) {
       console.error(error);
       res.status(500).send('Error retrieving collections: ' + error.message);
