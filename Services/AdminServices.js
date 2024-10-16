@@ -52,5 +52,5 @@ const AdminGrantAccessService = async (userId) => {
 module.exports = {
     createRazorpayOrder,
     verifyRazorpaySignature,
-    AdminGrantAceessService
+    AdminGrantAccessService
 };
