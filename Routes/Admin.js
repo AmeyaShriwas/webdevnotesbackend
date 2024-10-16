@@ -49,12 +49,6 @@ router.post('/admin/login', AdminController.AdminloginUser);
 
 
 // router.post('/upload', upload.single('file'), AdminController.uploadPdf);
-router.post('/upload', upload.single('file'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).send('No file uploaded.');
-  }
-  // Proceed with handling the uploaded file (e.g., saving it)
-  res.status(200).json({ message: 'File uploaded successfully', file: req.file });
-});
+router.post('/upload', upload.single('file'), AdminController.uploadPdf );
 
 module.exports = router;
