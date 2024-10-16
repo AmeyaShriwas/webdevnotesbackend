@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const User = require('../Models/UserModel');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
+const PDF  = require('./../Models/PDF')
 
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
