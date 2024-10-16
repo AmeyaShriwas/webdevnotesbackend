@@ -39,6 +39,6 @@ router.post('/order', Auth, AdminController.createOrder);
 router.post('/verify', AdminController.verifyPayment);
 router.get('/getAllOrders', AdminController.getAllOrders);
 
-router.post('/upload', upload.single('pdf'), pdfController.uploadPdf);
+// router.post('/upload', upload.single('pdf'), pdfController.uploadPdf);
 
 module.exports = router;
