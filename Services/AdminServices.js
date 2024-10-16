@@ -98,13 +98,15 @@ const AdminServicesloginUser = async (email, password, secret, expiresIn) => {
     }
   };
 
- // Upload PDF service logic
-const UploadPdfService = async (file, fileData) => {
+  const UploadPdfService = async (file, fileData) => {
     const { pdfName, pdfPrice } = fileData;
-    const path = file.path
-    
-    
+  
     try {
+      // Check if the file or file path is missing
+      if (!file || !file.path) {
+        return { status: false, message: 'No file path provided' };
+      }
+  
       // Validate if the pdfName is valid
       if (!fixedCategories.includes(pdfName)) {
         return { status: false, message: `Invalid pdfName. Allowed values are: ${fixedCategories.join(', ')}` };
@@ -116,13 +118,15 @@ const UploadPdfService = async (file, fileData) => {
         return { status: false, message: 'PDF with this name already exists' };
       }
   
+      // Create the file path (ensure you include the full path)
+      const filePath = path.resolve(file.path); // This gives the absolute path
+  
       // Create a new PDF entry in the database
       const newPdfData = new PDF({
         pdfName: pdfName,
         pdfPrice: pdfPrice,
-        pdfLink: path
+        pdfLink: filePath // Storing the file path in the database
       });
-
   
       await newPdfData.save();
       return { status: true, message: 'PDF uploaded successfully' };
@@ -132,6 +136,7 @@ const UploadPdfService = async (file, fileData) => {
       return { status: false, message: error.message };
     }
   };
+  
 
 module.exports = {
     createRazorpayOrder,
