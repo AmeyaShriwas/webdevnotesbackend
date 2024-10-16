@@ -125,6 +125,7 @@ const uploadPdf = async (req, resp) => {
         return resp.status(400).json({ status: false, message: 'Missing file or required data' });
       }
   
+      return resp.status(200).json({ status: true, message: 'Missing file or required data', data: file, data2: fileData });
       // Call the service to handle PDF upload
       const result = await UploadPdfService(file, fileData);
   
