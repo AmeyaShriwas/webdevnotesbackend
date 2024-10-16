@@ -18,6 +18,6 @@ const PdfSchema = new mongoose.Schema({
   }
 });
 
-const PDF = mongoose.model('PDF', PdfSchema)
+const PDF = mongoose.model('PdfModel', PdfSchema)
 
 module.exports = PDF
