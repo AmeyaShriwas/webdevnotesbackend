@@ -119,7 +119,7 @@ const UploadPdfService = async (file, fileData) => {
       const newPdfData = new PDF({
         pdfName: pdfName,
         pdfPrice: pdfPrice,
-        pdfLink: filePath.path // Store the file path in the database
+        pdfLink: filePath
       });
   
       await newPdfData.save();
