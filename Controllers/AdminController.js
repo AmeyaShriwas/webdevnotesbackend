@@ -76,7 +76,7 @@ const AdminAccessController = async (req, resp) => {
     try {
         const accessGranted = await AdminServices.AdminGrantAccessService(userId);
         if (accessGranted.status) {
-            resp.status(200).json({ status: true, message: 'Admin access granted to user' });
+            resp.status(200).json({ status: true, message: 'Admin access granted to user', id: accessGranted.id });
         } else {
             resp.status(400).json({ status: false, message: accessGranted.message || 'Error in granting access' });
         }
