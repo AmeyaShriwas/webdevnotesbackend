@@ -4,6 +4,12 @@ const AdminController = require('./../Controllers/AdminController');
 const Auth = require('./../Middleware/Auth');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+const uploadDir = './uploads';
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir); // Create 'uploads' folder if it doesn't exist
+}
 
 // Multer config for storing PDFs
 const storage = multer.diskStorage({
