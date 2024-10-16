@@ -22,6 +22,25 @@ app.get('/', (req, res) => {
   res.send('API is working');
 });
 
+app.delete('/api/delete-collection', async (req, res) => {
+  const { collectionName } = req.body;
+
+  if (!collectionName) {
+      return res.status(400).send('Collection name is required');
+  }
+
+  try {
+      // Get a reference to the collection
+      const collection = mongoose.connection.collection(collectionName);
+
+      // Drop the collection
+      await collection.drop();
+      res.status(200).send(`Collection '${collectionName}' deleted successfully`);
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Error deleting collection: ' + error.message);
+  }
+});
 // Define routes
 app.use('/', authRoutes);
 app.use('/api', adminRoutes);
