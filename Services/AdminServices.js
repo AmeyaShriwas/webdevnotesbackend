@@ -37,7 +37,7 @@ const verifyRazorpaySignature = (razorpay_order_id, razorpay_payment_id, razorpa
 const AdminGrantAccessService = async (userId) => {
     console.log('id', userId)
     try {
-        const findUser = await User.findById(userId);  // Directly passing the userId
+        const findUser = await User.findOne({_id: userId});  // Directly passing the userId
         if (findUser) {
             findUser.role = 'admin';
             await findUser.save();
