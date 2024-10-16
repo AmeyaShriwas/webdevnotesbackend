@@ -107,11 +107,7 @@ const AdminServicesloginUser = async (email, password, secret, expiresIn) => {
         return { status: false, message: 'No file path provided' };
       }
   
-      // Validate if the pdfName is valid
-      if (!fixedCategories.includes(pdfName)) {
-        return { status: false, message: `Invalid pdfName. Allowed values are: ${fixedCategories.join(', ')}` };
-      }
-  
+     
       // Check if a PDF with the same name already exists
       const existingPdf = await PDF.findOne({ pdfName });
       if (existingPdf) {

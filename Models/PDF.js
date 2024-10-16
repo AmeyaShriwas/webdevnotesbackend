@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 // Define fixed categories
-const fixedCategories = ['HTML', 'CSS', 'JavaScript', 'ReactJS', 'NodeJS', 'ExpressJS', 'MongoDB', 'MySQL', 'Bootstrap'];
 
 const PdfSchema = new mongoose.Schema({
   pdfName: {
