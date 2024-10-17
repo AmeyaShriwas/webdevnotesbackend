@@ -13,9 +13,19 @@ dotenv.config();
 const allowedOrigins = [
   'https://dashboard.ameyashriwas.in',
   'https://ameyashriwas.in',
+  '*'
   // Add more allowed origins as needed
 ];
-app.use(cors({origin: '*'}))
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true); // Allow request if origin is in the allowed list or is undefined (for requests like server-to-server)
+    } else {
+      callback(new Error('Not allowed by CORS')); // Deny the origin
+    }
+  },
+  optionsSuccessStatus: 200 // Some legacy browsers choke on status 204 for CORS
+}));
 
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
