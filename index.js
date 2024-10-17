@@ -12,6 +12,7 @@ dotenv.config();
 const allowedOrigins = [
   'https://dashboard.ameyashriwas.in',
   'https://ameyashriwas.in',
+  'http://localhost:3000/'
   // Add more allowed origins as needed
 ];
 
