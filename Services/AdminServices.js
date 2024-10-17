@@ -100,30 +100,37 @@ const AdminServicesloginUser = async (email, password, secret, expiresIn) => {
     }
   };
 
-  const UploadPdfService = async (file, fileData) => {
-    const { pdfName, pdfPrice } = fileData;
+  // Service for handling PDF upload
+const UploadPdfService = async (pdfFile, imageFile, fileData) => {
+    const { pdfName, pdfPrice, pdfSubTypes } = fileData;
   
     try {
       // Check if the file or file path is missing
-      if (!file || !file.path) {
-        return { status: false, message: 'No file path provided' };
+      if (!pdfFile || !pdfFile.path) {
+        return { status: false, message: 'No PDF file path provided' };
       }
   
-     
+      if (!imageFile || !imageFile.path) {
+        return { status: false, message: 'No image file path provided' };
+      }
+  
       // Check if a PDF with the same name already exists
       const existingPdf = await PDF.findOne({ pdfName });
       if (existingPdf) {
         return { status: false, message: 'PDF with this name already exists' };
       }
   
-      // Create the file path (ensure you include the full path)
-      const filePath = path.resolve(file.path); // This gives the absolute path
+      // Create the file paths
+      const pdfPath = path.resolve(pdfFile.path); // Absolute path for the PDF
+      const imagePath = path.resolve(imageFile.path); // Absolute path for the image
   
       // Create a new PDF entry in the database
       const newPdfData = new PDF({
         pdfName: pdfName,
         pdfPrice: pdfPrice,
-        pdfLink: filePath // Storing the file path in the database
+        pdfLink: pdfPath, // Storing the PDF file path in the database
+        pdfImg: imagePath, // Storing the image path in the database
+        pdfSubTypes: JSON.parse(pdfSubTypes), // Assuming subcategories is a JSON string
       });
   
       await newPdfData.save();

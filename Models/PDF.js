@@ -14,6 +14,14 @@ const PdfSchema = new mongoose.Schema({
   pdfLink: {
     type: String, // Store the file path or URL to the PDF
     required: true,
+  },
+  pdfImg: {
+    type: String,
+    required: true
+  },
+  pdfSubTypes: {
+    type: [String],
+    required: true
   }
 });
 

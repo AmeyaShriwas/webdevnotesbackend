@@ -23,12 +23,12 @@ const storage = multer.diskStorage({
   }
 });
 
-// File filter to allow only PDFs
+// File filter to allow only PDFs and Images (jpeg, png)
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'application/pdf') {
+  if (file.mimetype === 'application/pdf' || file.mimetype.startsWith('image/')) {
     cb(null, true); // Accept file
   } else {
-    cb(new Error('Only PDF files are allowed!'), false); // Reject non-PDF file
+    cb(new Error('Only PDF and image files are allowed!'), false); // Reject other files
   }
 };
 
@@ -47,6 +47,12 @@ router.get('/getAllOrders', AdminController.getAllOrders);
 router.post('/admin/login', AdminController.AdminloginUser);
 
 // Upload PDF route
-router.post('/upload', upload.single('file'), AdminController.uploadPdf);
+// Handle both single image and single PDF upload
+router.post('/upload', upload.fields([
+  { name: 'file', maxCount: 1 },  // Single PDF upload
+  { name: 'pdfImg', maxCount: 1 } // Single image upload
+]), AdminController.uploadPdf);
+
+// router.get('/pdf/', upload.single('file'), AdminController.uploadPdf);
 
 module.exports = router;
