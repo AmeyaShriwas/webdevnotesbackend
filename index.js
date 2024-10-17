@@ -15,15 +15,7 @@ const allowedOrigins = [
   'https://ameyashriwas.in',
   // Add more allowed origins as needed
 ];
-
-app.use(cors((req, callback) => {
-  const origin = req.header('Origin');
-  if (allowedOrigins.indexOf(origin) !== -1) {
-    callback(null, true); // Allow the origin
-  } else {
-    callback(new Error('Not allowed by CORS')); // Deny the origin
-  }
-}));
+app.use(cors({origin: '*'}))
 
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
