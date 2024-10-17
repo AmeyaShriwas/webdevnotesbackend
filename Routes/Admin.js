@@ -32,10 +32,10 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Limit file size to 20MB (adjusted based on your comment)
+// Limit file size to 50MB (adjust this value as needed)
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB limit
+  limits: { fileSize: 50 * 1024 * 1024 }, // Increased limit to 50MB
   fileFilter: fileFilter,
 });
 
@@ -52,7 +52,5 @@ router.post('/upload', upload.fields([
   { name: 'file', maxCount: 1 },  // Single PDF upload
   { name: 'pdfImg', maxCount: 1 } // Single image upload
 ]), AdminController.uploadPdf);
-
-// router.get('/pdf/', upload.single('file'), AdminController.uploadPdf);
 
 module.exports = router;
