@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const authRoutes = require('./Routes/Users');
 const adminRoutes = require('./Routes/Admin');
 const pdfFind = require('./Models/PDF')
+const path = require('path')
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ app.use(cors((req, callback) => {
   }
 }));
 
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(express.json({ limit: '50mb' })); // Adjust as needed
 app.use(express.urlencoded({ limit: '50mb', extended: true })); // Adjust as needed

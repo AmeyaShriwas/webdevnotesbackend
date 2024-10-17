@@ -100,8 +100,7 @@ const AdminServicesloginUser = async (email, password, secret, expiresIn) => {
     }
   };
 
-  // Service for handling PDF upload
-const UploadPdfService = async (pdfFile, imageFile, fileData) => {
+  const UploadPdfService = async (pdfFile, imageFile, fileData) => {
     const { pdfName, pdfPrice, pdfSubTypes } = fileData;
   
     try {
@@ -120,16 +119,16 @@ const UploadPdfService = async (pdfFile, imageFile, fileData) => {
         return { status: false, message: 'PDF with this name already exists' };
       }
   
-      // Create the file paths
-      const pdfPath = path.resolve(pdfFile.path); // Absolute path for the PDF
-      const imagePath = path.resolve(imageFile.path); // Absolute path for the image
+      // Create relative file paths for saving to the database
+      const pdfPath = `/uploads/${pdfFile.filename}`; // Store relative path for the PDF
+      const imagePath = `/uploads/${imageFile.filename}`; // Store relative path for the image
   
       // Create a new PDF entry in the database
       const newPdfData = new PDF({
         pdfName: pdfName,
         pdfPrice: pdfPrice,
-        pdfLink: pdfPath, // Storing the PDF file path in the database
-        pdfImg: imagePath, // Storing the image path in the database
+        pdfLink: pdfPath, // Storing the relative PDF file path
+        pdfImg: imagePath, // Storing the relative image file path
         pdfSubTypes: JSON.parse(pdfSubTypes), // Assuming subcategories is a JSON string
       });
   
