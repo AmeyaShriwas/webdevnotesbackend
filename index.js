@@ -25,7 +25,8 @@ app.use(cors((req, callback) => {
 }));
 
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' })); // Adjust as needed
+app.use(express.urlencoded({ limit: '50mb', extended: true })); // Adjust as needed
 
 // Connect to MongoDB using environment variable
 mongoose.connect(process.env.MONGO_URI)
