@@ -10,14 +10,26 @@ const path = require('path')
 
 dotenv.config();
 
-app.use(cors({origin: '*'})) // app.use(middleware) - middleware funtioon - all to all requrest - *
-app.use(express.json()) //when json data received - parse all jsson data to javascritp object to use here
-app.use(bodyParser.json({ limit: '100mb' }));
-app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+const allowedOrigins = [
+  'https://dashboard.ameyashriwas.in',
+  'https://ameyashriwas.in',
+  // Add more allowed origins as needed
+];
+
+app.use(cors((req, callback) => {
+  const origin = req.header('Origin');
+  if (allowedOrigins.indexOf(origin) !== -1) {
+    callback(null, true); // Allow the origin
+  } else {
+    callback(new Error('Not allowed by CORS')); // Deny the origin
+  }
+}));
+
+// Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.set('view engine', 'ejs')// ejs is embedded javascript - server side template send from server to front end 
-
+app.use(express.json({ limit: '50mb' })); // Adjust as needed
+app.use(express.urlencoded({ limit: '50mb', extended: true })); // Adjust as needed
 
 // Connect to MongoDB using environment variable
 mongoose.connect(process.env.MONGO_URI)
