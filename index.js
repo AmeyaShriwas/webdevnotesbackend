@@ -5,35 +5,34 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const authRoutes = require('./Routes/Users');
 const adminRoutes = require('./Routes/Admin');
-const pdfFind = require('./Models/PDF')
 const path = require('path')
 
 dotenv.config();
 
+// CORS configuration
 const allowedOrigins = [
   'https://dashboard.ameyashriwas.in',
   'https://ameyashriwas.in',
   '*'
-  // Add more allowed origins as needed
 ];
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true); // Allow request if origin is in the allowed list or is undefined (for requests like server-to-server)
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS')); // Deny the origin
+      callback(new Error('Not allowed by CORS'));
     }
   },
-  optionsSuccessStatus: 200 // Some legacy browsers choke on status 204 for CORS
+  optionsSuccessStatus: 200
 }));
 
-// Serve static files from the uploads directory
+// Static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use(express.json({ limit: '50mb' })); // Adjust as needed
-app.use(express.urlencoded({ limit: '50mb', extended: true })); // Adjust as needed
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// Connect to MongoDB using environment variable
+// MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('Error connecting to MongoDB:', error));
@@ -43,45 +42,50 @@ app.get('/', (req, res) => {
   res.send('API is working');
 });
 
+// Endpoint to delete a collection (first find, then delete)
 app.delete('/api/delete-collection', async (req, res) => {
   const { collectionName } = req.body;
 
   if (!collectionName) {
-      return res.status(400).send('Collection name is required');
+    return res.status(400).send('Collection name is required');
   }
 
   try {
-      // Get a reference to the collection
-      const collection = mongoose.connection.collection(collectionName);
+    // Check if the collection exists
+    const collections = await mongoose.connection.db.listCollections({ name: collectionName }).toArray();
+    
+    if (collections.length === 0) {
+      return res.status(404).send(`Collection '${collectionName}' not found`);
+    }
 
-      // Drop the collection
-      await collection.drop();
-      res.status(200).send(`Collection '${collectionName}' deleted successfully`);
+    // Collection found, proceed to delete
+    await mongoose.connection.collection(collectionName).drop();
+    res.status(200).send(`Collection '${collectionName}' deleted successfully`);
   } catch (error) {
-      console.error(error);
-      res.status(500).send('Error deleting collection: ' + error.message);
+    console.error(error);
+    res.status(500).send('Error deleting collection: ' + error.message);
   }
 });
 
+// API to get all collections
 app.get('/api/collections', async (req, res) => {
   try {
-      // Get the list of collections
-      const collections = await pdfFind.find()
-
+    // Retrieve all collections in the database
+    const collections = await mongoose.connection.db.listCollections().toArray();
     
+    // Extract only collection names to return
+    const collectionNames = collections.map(collection => collection.name);
 
-      res.status(200).json(collections);
+    res.status(200).json(collectionNames);
   } catch (error) {
-      console.error(error);
-      res.status(500).send('Error retrieving collections: ' + error.message);
+    console.error(error);
+    res.status(500).send('Error retrieving collections: ' + error.message);
   }
 });
 
 // Define routes
 app.use('/', authRoutes);
 app.use('/api', adminRoutes);
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
-
 
 // Start the server
 app.listen(process.env.PORT, () => {
