@@ -83,6 +83,32 @@ app.get('/api/collections', async (req, res) => {
   }
 });
 
+// New endpoint to get details of a specified collection
+app.post('/api/get-collection-details', async (req, res) => {
+  const { collectionName } = req.body;
+
+  if (!collectionName) {
+    return res.status(400).send('Collection name is required');
+  }
+
+  try {
+    // Check if the collection exists
+    const collections = await mongoose.connection.db.listCollections({ name: collectionName }).toArray();
+    
+    if (collections.length === 0) {
+      return res.status(404).send(`Collection '${collectionName}' not found`);
+    }
+
+    // Fetch all documents from the specified collection
+    const collectionData = await mongoose.connection.collection(collectionName).find({}).toArray();
+    
+    res.status(200).json(collectionData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error retrieving collection details: ' + error.message);
+  }
+});
+
 // Define routes
 app.use('/', authRoutes);
 app.use('/api', adminRoutes);
