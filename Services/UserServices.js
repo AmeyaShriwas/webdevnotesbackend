@@ -210,7 +210,7 @@ const getContactUsServices = async()=> {
 
 const getUserServicesOrders = async(userId)=> {
    try{
-    const allOrders = await Order.findAll({_id: userId})
+    const allOrders = await Order.find({_id: userId})
     if(allOrders.length === 0){
       return {status: true, message: 'No orders yet', data: allOrders}
     }
