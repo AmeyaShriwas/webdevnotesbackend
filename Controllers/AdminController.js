@@ -9,11 +9,17 @@ const createOrder = async (req, resp) => {
 
     try {
         const order = await AdminServices.createRazorpayOrder(amount);
+        console.log('itemCart', ItemsCart)
+        let ItemCartArray = []
+
+        ItemsCart.forEach(element => {
+             ItemCartArray.push(element.pdfName)
+        });
         
         const newOrder = new Order({
             user: userId,
             amount: amount, // Amount in rupees
-            pdfs: ItemsCart.pdfName,
+            pdfs: ItemCartArray,
             razorpay_order_id: order.id,
             status: 'pending',
         });
