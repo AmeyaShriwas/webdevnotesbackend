@@ -38,7 +38,7 @@ const sendOtpEmail = async (email, otp, username) => {
 };
 
 const sendSMS = async(otp, number)=> {
-  const api_key= process.env.FAST2SMS_API_KEY
+  const api_key= 'lJXZIVbEwHdUMq9kFB0LGYtpmTrnx3WvcufyziKD1eSOh6RaN2KOurUCe4hnkRjDbwavsXzE5GZtVgli'
   console.log('apikey', api_key)
 
   const data = {
