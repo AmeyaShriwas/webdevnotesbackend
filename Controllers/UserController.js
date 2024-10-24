@@ -180,5 +180,22 @@ const getContactUsController = async(req, resp) => {
   }
 }
 
+const getUserOrder = async(req, resp)=> {
+   try{
+    const userId = req.user;
+    const response = await authService.getUserServicesOrders(userId)
+    if(response.status){
+        resp.status(200).json({status: true, message: 'Users Orders successfully get', data: response.data})
+    }
+    else{
+      resp.status(400).json({status: false, message: 'error in getting orders'})
+    }
 
-module.exports = { signUpUser, verifyOtp, loginUser, forgotPassword, resetPassword, verifyToken, contactUsController, getContactUsController};
+   }
+   catch(error){
+    resp.status(500).json({status: false, message: 'internal server error'})
+   }
+}
+
+
+module.exports = { signUpUser, verifyOtp, loginUser, forgotPassword, resetPassword, verifyToken, contactUsController, getContactUsController, getUserOrder};

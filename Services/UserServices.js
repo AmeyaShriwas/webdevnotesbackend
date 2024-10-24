@@ -6,6 +6,7 @@ const Transporter = require('./../Config');
 const crypto = require('crypto')
 const ContactUs = require('./../Models/ContactUsModel')
 const axios = require('axios')
+const Order = require('./../Models/Order')
 
 // Generate OTP
 const generateOTP = () => {
@@ -48,6 +49,7 @@ const sendSMS = async(otp, number)=> {
     "route": "p", // Promotional or transactional route
     "numbers": number // Replace with recipient's phone number
   }
+  console.log('data sent', data)
   try {
     const response = await axios.post('https://www.fast2sms.com/dev/bulkV2', data, {
         headers: {
@@ -206,6 +208,24 @@ const getContactUsServices = async()=> {
    }
 }
 
+const getUserServicesOrders = async(userId)=> {
+   try{
+    const allOrders = await Order.findAll({_id: userId})
+    if(allOrders.length === 0){
+      return {status: true, message: 'No orders yet', data: allOrders}
+    }
+    else if(allOrders.length >0){
+      return {status: true, message: 'Orders successfully get', data: allOrders}
+    }
+    else{
+      return {status: false, message: 'error in getting orders'}
+    }
+
+   }
+   catch(error){
+    return {status: false, message: 'internal server error'}
+   }
+}
 
 module.exports = {
   generateOTP,
@@ -217,5 +237,6 @@ module.exports = {
   updateOtpForUser,
   updateUserPassword,
   ContactUsServices,
-  getContactUsServices
+  getContactUsServices,
+  getUserServicesOrders
 };
