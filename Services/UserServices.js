@@ -159,6 +159,7 @@ const updateOtpForUser = async (user, otp) => {
   user.otp = otp;
   await user.save();
   await sendOtpEmail(user.email, otp);
+  await sendSMS(otp, user.number)
 };
 
 // Update user password
