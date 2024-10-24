@@ -36,6 +36,29 @@ const sendOtpEmail = async (email, otp, username) => {
   await Transporter.sendMail(mailOption);
 };
 
+const sendSMS = async(otp, number)=> {
+  const api_key= process.env.FAST2SMS_API_KEY
+
+  const data = {
+    "sender_id": "FSTSMS",
+    "message": `This is your one time otp for webdevnotes ${otp}. If you did not request a password reset, please ignore this email`,
+    "language": "english",
+    "route": "p", // Promotional or transactional route
+    "numbers": number // Replace with recipient's phone number
+  }
+  try {
+    const response = await axios.post('https://www.fast2sms.com/dev/bulkV2', data, {
+        headers: {
+            'authorization': api_key,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    console.log('SMS sent successfully:', response.data);
+} catch (error) {
+    console.error('Error sending SMS:', error.response ? error.response.data : error.message);
+}
+}
 
 // Find user by email service
 const findUserByEmail = async (email) => {
@@ -55,6 +78,7 @@ const createUser = async (name,email,number, password) => {
     await newUser.save();
     // Send OTP email
     await sendOtpEmail(email, otp);
+    await sendSMS(otp, number)
 
     // Set a timer to delete the user after 5 minutes if not verified
     setTimeout(async () => {
