@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const Transporter = require('./../Config');
 const crypto = require('crypto')
 const ContactUs = require('./../Models/ContactUsModel')
+const axios = require('axios')
 
 // Generate OTP
 const generateOTP = () => {
