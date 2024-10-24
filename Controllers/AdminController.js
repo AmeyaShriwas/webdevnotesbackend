@@ -13,7 +13,7 @@ const createOrder = async (req, resp) => {
         const newOrder = new Order({
             user: userId,
             amount: amount, // Amount in rupees
-            pdfs: ItemsCart,
+            pdfs: ItemsCart.pdfName,
             razorpay_order_id: order.id,
             status: 'pending',
         });
