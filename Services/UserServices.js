@@ -54,9 +54,13 @@ const sendSMS = async(otp, number)=> {
             'authorization': api_key,
             'Content-Type': 'application/json'
         }
-    });
+    }).then(()=> {
+      console.log('SMS sent successfully:', response.data);
+    })
+    .catch((error)=> {
+      console.log('error in sending messages', error)
+    })
 
-    console.log('SMS sent successfully:', response.data);
 } catch (error) {
     console.error('Error sending SMS:', error.response ? error.response.data : error.message);
 }
