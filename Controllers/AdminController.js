@@ -27,40 +27,42 @@ const createOrder = async (req, resp) => {
 };
 
 const verifyPayment = async (req, resp) => {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-    try {
-        const isAuthentic = AdminServices.verifyRazorpaySignature(razorpay_order_id, razorpay_payment_id, razorpay_signature);
+  try {
+      const isAuthentic = AdminServices.verifyRazorpaySignature(razorpay_order_id, razorpay_payment_id, razorpay_signature);
 
-        if (isAuthentic) {
-            const order = await Order.findOne({ razorpay_order_id });
+      if (isAuthentic) {
+          const order = await Order.findOne({ razorpay_order_id });
 
-            if (!order) {
-                return resp.status(404).json({ message: 'Order not found' });
-            }
+          if (!order) {
+              return resp.status(404).json({ message: 'Order not found' });
+          }
 
-            const payment = new Payment({
-                razorpay_order_id,
-                razorpay_payment_id,
-                razorpay_signature,
-            });
+          // Update the order status and save the payment details only after verification
+          const payment = new Payment({
+              razorpay_order_id,
+              razorpay_payment_id,
+              razorpay_signature,
+          });
 
-            order.razorpay_payment_id = razorpay_payment_id;
-            order.razorpay_signature = razorpay_signature;
-            order.status = 'success';
+          order.razorpay_payment_id = razorpay_payment_id;
+          order.razorpay_signature = razorpay_signature;
+          order.status = 'success';
 
-            await order.save();
-            await payment.save();
+          await order.save();
+          await payment.save();
 
-            return resp.json({ message: 'Payment Successfully' });
-        } else {
-            return resp.status(400).json({ message: 'Payment verification failed' });
-        }
-    } catch (error) {
-        console.log('error', error);
-        resp.status(500).json({ message: 'Internal Server Error' });
-    }
+          return resp.json({ message: 'Payment successfully verified' });
+      } else {
+          return resp.status(400).json({ message: 'Payment verification failed' });
+      }
+  } catch (error) {
+      console.log('error', error);
+      resp.status(500).json({ message: 'Internal Server Error' });
+  }
 };
+
 
 const getAllOrders = async (req, resp) => {
     try {
