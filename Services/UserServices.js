@@ -218,7 +218,7 @@ const getUserServicesOrders = async(userId)=> {
       return {status: true, message: 'Orders successfully get', data: allOrders}
     }
     else{
-      return {status: false, message: 'error in getting orders'}
+      return {status: false, message: 'error in getting orders', data: allOrders}
     }
 
    }
